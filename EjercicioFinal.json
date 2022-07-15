@@ -1,0 +1,878 @@
+{
+	"info": {
+		"_postman_id": "8cb66553-6f37-464d-be31-98219b7c3c50",
+		"name": "Ejercicio FInal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20320431"
+	},
+	"item": [
+		{
+			"name": "Flujo 1",
+			"item": [
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Usuario creado\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"id Usuario creado\", function () {\r",
+									"    pm.expect(jsonData.id).is.exist;\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.collectionVariables.set(\"idUser\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"name\": \"{{nombre}}\",\r\n\t\"gender\": \"male\",\r\n\t\"email\": \"{{mail}}\",\r\n\t\"status\": \"active\"\r\n}"
+						},
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/users",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate User Added",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Se listaron todos los usuarios\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Usuario se encuentra en lista de todos los usuarios\", function () {\r",
+									"    pm.expect(jsonData[0].id).to.eqls(pm.collectionVariables.get(\"idUser\"));\r",
+									"    pm.expect(jsonData[0].name).to.contains(pm.iterationData.get(\"nombre\"));\r",
+									"    pm.expect(jsonData[0].email).to.eql(pm.iterationData.get(\"mail\")); \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}"
+							}
+						],
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/users",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Se ha actualizado el usuario correctamente\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Validar que usuario quedo inactive\", function () {\r",
+									"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"idUser\"));   \r",
+									"    pm.expect(jsonData.status).to.eql(\"inactive\");\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"status\", jsonData.status);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"status\": \"inactive\"\r\n}"
+						},
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/users/{{idUser}}",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users",
+								"{{idUser}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate User Updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Se listaron todos los usuarios\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Usuario se encuentra actualizado en lista de todos los usuarios\", function () {\r",
+									"    pm.expect(jsonData[0].id).to.eql(pm.collectionVariables.get(\"idUser\"));\r",
+									"    pm.expect(jsonData[0].status).is.eqls(pm.collectionVariables.get(\"status\")); \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}"
+							}
+						],
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/users",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Se ha eliminado correctamente\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}"
+							}
+						],
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/users/{{idUser}}",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users",
+								"{{idUser}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate User Deleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Se listaron todos los usuarios\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.test(\"Usuario no se encuentra en lista de todos los usuarios\", function () {\r",
+									"    pm.expect(jsonData[0].id).is.not.eqls(pm.collectionVariables.get(\"idUser\")); \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}"
+							}
+						],
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/users",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Flujo2",
+			"item": [
+				{
+					"name": "Search Comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Comentario obtenido satisfactoriamente\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Valido id comentario consultado\", function () {\r",
+									"    pm.expect(jsonData.id).to.eql(pm.iterationData.get(\"idComment\"));\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"idPost\", jsonData.post_id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/comments/{{idComment}}",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"comments",
+								"{{idComment}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search All Post Comments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Comentarios obtenidos satisfactoriamente del post\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Valido que comentarios obtenidos corresponda al post\", function () {\r",
+									"    let largo = Object.keys(jsonData).length;\r",
+									"    console.log(\"Cantidad de comentarios: \" + largo)\r",
+									"    for(let i = 0; i < largo ;i++){\r",
+									"        pm.expect(jsonData[i].id).to.eql(pm.iterationData.get(\"idComment\"));\r",
+									"        pm.expect(jsonData[i].post_id).to.eql(pm.collectionVariables.get(\"idPost\"));\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/posts/{{idPost}}/comments",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"posts",
+								"{{idPost}}",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create A Post Comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Comentario creado satisfactoriamente\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    pm.expect(jsonData.id).is.exist;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Valido que comentario se haya creado en el post_id\", function () {\r",
+									"    pm.expect(jsonData.post_id).to.eql(pm.collectionVariables.get(\"idPost\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Valido contenido comentario\", function () {\r",
+									"    pm.expect(jsonData.name).to.eql(pm.iterationData.get(\"nombre\"));\r",
+									"    pm.expect(jsonData.email).to.eql(pm.iterationData.get(\"mail\"));\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"idNewComment\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"post_id\": {{idPost}},\r\n        \"name\": \"{{nombre}}\",\r\n        \"email\": \"{{mail}}\",\r\n        \"body\": \"Nuevo comentario\"\r\n    }"
+						},
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/posts/{{idPost}}/comments",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"posts",
+								"{{idPost}}",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate Comment Added",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Comentarios obtenidos satisfactoriamente del post\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Valido existencia nuevo comentario y que comentarios obtenidos corresponda al post\", function () {\r",
+									"    pm.expect(jsonData.id).to.eql(pm.iterationData.get(\"idNewComment\"));\r",
+									"    let largo = Object.keys(jsonData).length;\r",
+									"    console.log(\"Cantidad de comentarios: \" + largo)\r",
+									"    for(let i = 0; i < largo ;i++){\r",
+									"        pm.expect(jsonData[i].post_id).to.eql(pm.collectionVariables.get(\"idPost\"));\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/posts/{{idPost}}/comments",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"posts",
+								"{{idPost}}",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Comentario obtenido satisfactoriamente\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Valido id comentario consultado\", function () {\r",
+									"    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"idNewComment\"));\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"bodyComment\", pm.request.body.raw);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"body\": \"actualizo comentario\" \r\n}"
+						},
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/comments/{{idNewComment}}",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"comments",
+								"{{idNewComment}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate Comment Updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Comentarios obtenidos satisfactoriamente del post\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Valido que se haya actualizado el comentario\", function () {\r",
+									"    pm.expect(pm.collectionVariables.get(\"bodyComment\")).to.contains(jsonData[0].body);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/posts/{{idPost}}/comments",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"posts",
+								"{{idPost}}",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Comment Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Se ha eliminado correctamente el comentario\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/comments/{{idNewComment}}",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"comments",
+								"{{idNewComment}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate Comment Deleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Comentario eliminado satisfactoriamente\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Valido que se haya eliminado el comentario\", function () {\r",
+									"    pm.expect(jsonData[0].id).to.not.eql(pm.iterationData.get(\"idNewComment\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{bearer}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{urlGorest}}/public/v2/posts/{{idPost}}/comments",
+							"host": [
+								"{{urlGorest}}"
+							],
+							"path": [
+								"public",
+								"v2",
+								"posts",
+								"{{idPost}}",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "nombre",
+			"value": "Francisco",
+			"type": "string"
+		},
+		{
+			"key": "apellido",
+			"value": "Torres",
+			"type": "string"
+		},
+		{
+			"key": "mail",
+			"value": "b@c.cl",
+			"type": "string"
+		},
+		{
+			"key": "idUser",
+			"value": ""
+		},
+		{
+			"key": "status",
+			"value": ""
+		},
+		{
+			"key": "idComment",
+			"value": "1472",
+			"type": "string"
+		},
+		{
+			"key": "idPost",
+			"value": ""
+		},
+		{
+			"key": "idNewComment",
+			"value": ""
+		},
+		{
+			"key": "bodyComment",
+			"value": ""
+		}
+	]
+}

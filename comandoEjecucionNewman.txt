@@ -1,0 +1,1 @@
+newman run EjercicioFinal.json -r htmlextra -n 5 --reporter-htmlextra-title "Mis pruebas" -d C:/Users/franc/Desktop/Flujo1.csv -d C:/Users/franc/Desktop/Flujo2.csv --environment "New Environment.postman_environment.json" --globals workspace.postman_globals.json

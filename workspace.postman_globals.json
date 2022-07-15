@@ -1,0 +1,45 @@
+{
+	"id": "68a5e6fc-b657-497d-8ef3-1e1977440ec6",
+	"values": [
+		{
+			"key": "apellido",
+			"value": "Torres",
+			"type": "default",
+			"enabled": false
+		},
+		{
+			"key": "nombre",
+			"value": "Francisco",
+			"type": "default",
+			"enabled": false
+		},
+		{
+			"key": "ciudad",
+			"value": "Concon",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "pais",
+			"value": "Chile",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "edad",
+			"value": "32",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "bearer",
+			"value": "05798779d582292a57428973a89a1c9006bd0cd27e19119e3184bf106d1b24fa",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"name": "Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2022-07-14T20:44:58.733Z",
+	"_postman_exported_using": "Postman/9.24.2"
+}
